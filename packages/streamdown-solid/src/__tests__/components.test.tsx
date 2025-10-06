@@ -1,5 +1,4 @@
 import { render } from '@solidjs/testing-library'
-import React from 'react'
 import { describe, expect, it } from 'vitest'
 import { components } from '../components'
 

@@ -14,9 +14,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
-    "noEmit": true,
-    "types": ["solid-js"]
-  },
-  "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "build", "dist"]
+    "types": ["solid-js"],
+    "outDir": "dist"
+  }
 }

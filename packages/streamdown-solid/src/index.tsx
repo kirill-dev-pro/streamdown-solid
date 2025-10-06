@@ -1,5 +1,4 @@
-import { createContext, createMemo, createUniqueId, type JSX } from 'solid-js'
-import { render } from 'solid-js/web'
+import { createContext, createMemo } from 'solid-js'
 import { SolidMarkdown } from 'solid-markdown'
 import rehypeKatex from 'rehype-katex'
 import rehypeRaw from 'rehype-raw'
@@ -70,12 +69,11 @@ const Block = (props: BlockProps) => {
       : props.content,
   )
 
-  return <SolidMarkdown {...props} children={parsedContent()} />
+  return <SolidMarkdown children={parsedContent()} />
 }
 
 export const Streamdown = (props: StreamdownProps) => {
   const {
-    children,
     allowedImagePrefixes = ['*'],
     allowedLinkPrefixes = ['*'],
     defaultOrigin,
@@ -90,11 +88,10 @@ export const Streamdown = (props: StreamdownProps) => {
     ...restProps
   } = props
 
-  // Parse the children to remove incomplete markdown tokens if enabled
-  const generatedId = createUniqueId()
   const blocks = createMemo(() =>
-    parseMarkdownIntoBlocks(typeof children === 'string' ? children : ''),
+    parseMarkdownIntoBlocks(typeof props.children === 'string' ? props.children : ''),
   )
+
   const rehypeKatexPlugin = createMemo(() =>
     rehypeKatex({ errorColor: 'var(--color-muted-foreground)' }),
   )

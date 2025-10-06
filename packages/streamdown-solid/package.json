@@ -1,0 +1,49 @@
+{
+  "name": "streamdown-solid",
+  "author": "Kirill Chuprov",
+  "license": "MIT",
+  "description": "A drop-in replacement for solid-markdown, designed for AI-powered streaming",
+  "version": "0.0.1",
+  "type": "module",
+  "module": "src/index.tsx",
+  "exports": {
+    ".": "./src/index.tsx"
+  },
+  "files": [
+    "src",
+    "dist",
+    "tsconfig.json"
+  ],
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "test": "vitest run",
+    "test:ui": "vitest --ui run",
+    "test:coverage": "vitest --coverage run"
+  },
+  "devDependencies": {
+    "@solidjs/testing-library": "^0.8.0",
+    "@types/bun": "latest",
+    "jsdom": "^27.0.0",
+    "prettier": "^3.6.2",
+    "solid-js": "^1.9.9",
+    "typescript": "^5.0.0",
+    "vite-plugin-solid": "^2.11.9",
+    "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "clsx": "^2.1.1",
+    "lucide-solid": "^0.544.0",
+    "mermaid": "^11.12.0",
+    "rehype-katex": "^7.0.1",
+    "rehype-raw": "^7.0.0",
+    "remark-gfm": "^4.0.1",
+    "remark-math": "^6.0.0",
+    "shiki": "^3.13.0",
+    "solid-markdown": "^2.0.14",
+    "tailwind-merge": "^3.3.1"
+  },
+  "peerDependencies": {
+    "solid-js": "^1.8.0"
+  }
+}

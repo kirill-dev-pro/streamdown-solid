@@ -3,20 +3,20 @@ import type { MermaidConfig } from 'mermaid'
 import { describe, expect, it, vi } from 'vitest'
 import { Streamdown } from '../index'
 
-// Mock the dependencies
-vi.mock('solid-markdown', () => ({
-  default: (props: any) => {
-    // Only render if children is provided
-    if (!props.children) {
-      return null
-    }
-    return (
-      <div data-testid='markdown' {...props}>
-        {props.children}
-      </div>
-    )
-  },
-}))
+// // Mock the dependencies
+// vi.mock('solid-markdown', () => ({
+//   default: (props: any) => {
+//     // Only render if children is provided
+//     if (!props.children) {
+//       return null
+//     }
+//     return (
+//       <div data-testid='markdown' {...props}>
+//         {props.children}
+//       </div>
+//     )
+//   },
+// }))
 
 vi.mock('rehype-katex', () => ({
   default: () => {},

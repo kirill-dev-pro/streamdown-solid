@@ -585,7 +585,9 @@ export const CodeBlockDownloadButton = (props: CodeBlockDownloadButtonProps) => 
       title='Download file'
       type='button'
     >
-      {props.children ?? <DownloadIcon size={14} />}
+      <Show when={props.children}>
+        <DownloadIcon size={14} />
+      </Show>
     </button>
   )
 }
