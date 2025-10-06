@@ -2,7 +2,7 @@
 
 A Solid.js drop-in replacement for solid-markdown, designed for AI-powered streaming.
 
-<!-- [![npm version](https://img.shields.io/npm/v/streamdown-solid)](https://www.npmjs.com/package/streamdown-solid) -->
+[![npm version](https://img.shields.io/npm/v/streamdown-solid)](https://www.npmjs.com/package/streamdown-solid)
 
 ## Overview
 
