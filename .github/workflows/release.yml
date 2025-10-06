@@ -19,7 +19,6 @@ jobs:
     timeout-minutes: 10
 
     steps:
-
       - name: Generate GitHub App Token
         id: generate-token
         uses: actions/create-github-app-token@v1

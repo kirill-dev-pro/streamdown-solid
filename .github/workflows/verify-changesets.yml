@@ -27,23 +27,23 @@ jobs:
         with:
           app-id: ${{ secrets.STREAMDOWN_APP_ID }}
           private-key: ${{ secrets.STREAMDOWN_APP_PRIVATE_KEY }}
-      
+
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ steps.generate-token.outputs.token }}
-      
+
       - uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
-      
+
       - name: get all changed files from .changeset/*.md
         id: changeset-files
         run: |
           echo "changed-files=$(git diff --diff-filter=dr --name-only $BASE_SHA -- '.changeset/*.md' | tr '\n' ' ')" >> $GITHUB_OUTPUT
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
-      
+
       - name: Verify changesets
         if: steps.changeset-files.outputs.changed-files != ''
         working-directory: .github/workflows/actions/verify-changesets

@@ -233,7 +233,6 @@ export type CodeBlockCopyButtonProps = {
   onCopy?: () => void
   onError?: (error: Error) => void
   timeout?: number
-  children?: JSX.Element
   className?: string
   code?: string
   [key: string]: any
@@ -242,7 +241,6 @@ export type CodeBlockCopyButtonProps = {
 export type CodeBlockDownloadButtonProps = {
   onDownload?: () => void
   onError?: (error: Error) => void
-  children?: JSX.Element
   className?: string
   code?: string
   language?: BundledLanguage
@@ -586,7 +584,6 @@ export const CodeBlockDownloadButton = (props: CodeBlockDownloadButtonProps) => 
       onClick={downloadCode}
       title='Download file'
       type='button'
-      {...props}
     >
       {props.children ?? <DownloadIcon size={14} />}
     </button>
@@ -631,7 +628,6 @@ export const CodeBlockCopyButton = (props: CodeBlockCopyButtonProps) => {
       )}
       onClick={copyToClipboard}
       type='button'
-      {...props}
     >
       <Show when={props.children && isCopied()} fallback={<CopyIcon size={14} />}>
         <CheckIcon size={14} />

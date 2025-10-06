@@ -1,5 +1,6 @@
 import { render } from '@solidjs/testing-library'
 import { Streamdown } from '../index'
+import { describe, expect, it } from 'vitest'
 
 describe('RTL (Right-to-Left) Support', () => {
   it('renders basic RTL text correctly', () => {

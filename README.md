@@ -1,37 +1,38 @@
-# Streamdown
+# Streamdown-Solid
 
-A drop-in replacement for react-markdown, designed for AI-powered streaming.
+A Solid.js drop-in replacement for solid-markdown, designed for AI-powered streaming.
 
-[![npm version](https://img.shields.io/npm/v/streamdown)](https://www.npmjs.com/package/streamdown)
+<!-- [![npm version](https://img.shields.io/npm/v/streamdown-solid)](https://www.npmjs.com/package/streamdown-solid) -->
 
 ## Overview
 
-Formatting Markdown is easy, but when you tokenize and stream it, new challenges arise. Streamdown is built specifically to handle the unique requirements of streaming Markdown content from AI models, providing seamless formatting even with incomplete or unterminated Markdown blocks.
+Formatting Markdown is easy, but when you tokenize and stream it, new challenges arise. Streamdown-Solid is built specifically to handle the unique requirements of streaming Markdown content from AI models, providing seamless formatting even with incomplete or unterminated Markdown blocks.
 
-Streamdown powers the [AI Elements Response](https://ai-sdk.dev/elements/components/response) component but can be installed as a standalone package for your own streaming needs.
+Streamdown-Solid powers the [AI Elements Response](https://ai-sdk.dev/elements/components/response) component but can be installed as a standalone package for your own streaming needs.
 
 ## Features
 
-- 🚀 **Drop-in replacement** for `react-markdown`
+- 🚀 **Drop-in replacement** for `solid-markdown`
 - 🔄 **Streaming-optimized** - Handles incomplete Markdown gracefully
 - 🎨 **Unterminated block parsing** - Styles incomplete bold, italic, code, links, and headings
 - 📊 **GitHub Flavored Markdown** - Tables, task lists, and strikethrough support
 - 🔢 **Math rendering** - LaTeX equations via KaTeX
 - 📈 **Mermaid diagrams** - Render Mermaid diagrams as code blocks with a button to render them
 - 🎯 **Code syntax highlighting** - Beautiful code blocks with Shiki
-- 🛡️ **Security-first** - Built on harden-react-markdown for safe rendering
+- 🛡️ **Security-first** - Built on secure rendering principles
 - ⚡ **Performance optimized** - Memoized rendering for efficient updates
+- ⚛️ **Solid.js native** - Built specifically for Solid.js with reactive primitives
 
 ## Installation
 
 ```bash
-npm i streamdown
+bun add streamdown-solid
 ```
 
 Then, update your Tailwind `globals.css` to include the following.
 
 ```css
-@source "../node_modules/streamdown/dist/index.js";
+@source "../node_modules/streamdown-solid/dist/index.js";
 ```
 
 Make sure the path matches the location of the `node_modules` folder in your project. This will ensure that the Streamdown styles are applied to your project.
@@ -41,7 +42,7 @@ Make sure the path matches the location of the `node_modules` folder in your pro
 ### Basic Example
 
 ```tsx
-import { Streamdown } from 'streamdown'
+import { Streamdown } from 'streamdown-solid'
 
 export default function Page() {
   const markdown = '# Hello World\n\nThis is **streaming** markdown!'
@@ -55,7 +56,7 @@ export default function Page() {
 Streamdown supports Mermaid diagrams using the `mermaid` language identifier:
 
 ```tsx
-import { Streamdown } from 'streamdown'
+import { Streamdown } from 'streamdown-solid'
 import type { MermaidConfig } from 'mermaid'
 
 export default function Page() {
@@ -101,46 +102,35 @@ sequenceDiagram
 ### With AI SDK
 
 ```tsx
-'use client'
+import { createSignal } from 'solid-js'
+import { Streamdown } from 'streamdown-solid'
 
-import { useChat } from '@ai-sdk/react'
-import { useState } from 'react'
-import { Streamdown } from 'streamdown'
-
+// Note: AI SDK integration would need to be adapted for Solid.js
+// This is a basic example showing the component usage
 export default function Page() {
-  const { messages, sendMessage, status } = useChat()
-  const [input, setInput] = useState('')
+  const [input, setInput] = createSignal('')
+  const [messages, setMessages] = createSignal<Array<{ id: string; text: string }>>([])
+
+  const handleSubmit = (e: Event) => {
+    e.preventDefault()
+    const text = input().trim()
+    if (text) {
+      setMessages((prev) => [...prev, { id: Date.now().toString(), text }])
+      setInput('')
+    }
+  }
 
   return (
     <>
-      {messages.map((message) => (
-        <div key={message.id}>
-          {message.parts
-            .filter((part) => part.type === 'text')
-            .map((part, index) => (
-              <Streamdown key={index}>{part.text}</Streamdown>
-            ))}
-        </div>
-      ))}
+      <For each={messages()}>{(message) => <Streamdown>{message.text}</Streamdown>}</For>
 
-      <form
-        onSubmit={(e) => {
-          e.preventDefault()
-          if (input.trim()) {
-            sendMessage({ text: input })
-            setInput('')
-          }
-        }}
-      >
+      <form onSubmit={handleSubmit}>
         <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          disabled={status !== 'ready'}
+          value={input()}
+          onInput={(e) => setInput(e.currentTarget.value)}
           placeholder='Say something...'
         />
-        <button type='submit' disabled={status !== 'ready'}>
-          Submit
-        </button>
+        <button type='submit'>Submit</button>
       </form>
     </>
   )
@@ -149,7 +139,7 @@ export default function Page() {
 
 ## Props
 
-Streamdown accepts all the same props as react-markdown, plus additional streaming-specific options:
+Streamdown accepts all the same props as solid-markdown, plus additional streaming-specific options:
 
 | Prop                      | Type                                                                | Default                           | Description                                                     |
 | ------------------------- | ------------------------------------------------------------------- | --------------------------------- | --------------------------------------------------------------- |
@@ -177,25 +167,25 @@ Streamdown is built as a monorepo with:
 
 ```bash
 # Install dependencies
-pnpm install
+bun install
 
-# Build the streamdown package
-pnpm --filter streamdown build
+# Build the streamdown-solid package
+bun run build
 
 # Run development server
-pnpm dev
+bun run dev
 
 # Run tests
-pnpm test
+bun test
 
 # Build packages
-pnpm build
+bun run build
 ```
 
 ## Requirements
 
 - Node.js >= 18
-- React >= 19.1.1
+- Solid.js >= 1.8.0
 
 ## Contributing
 

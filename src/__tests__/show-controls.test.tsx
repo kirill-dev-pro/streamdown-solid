@@ -159,7 +159,7 @@ ${markdownWithCode}
 
   describe('with custom components', () => {
     it('should respect controls with custom component overrides', () => {
-      const CustomParagraph = ({ children }: any) => <p className='custom-paragraph'>{children}</p>
+      const CustomParagraph = ({ children }: any) => <p class='custom-paragraph'>{children}</p>
 
       const { container } = render(() => (
         <Streamdown components={{ p: CustomParagraph }} controls={false}>
