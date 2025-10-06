@@ -36,7 +36,7 @@ export type ControlsConfig =
 
 export type StreamdownProps = SolidMarkdownProps & {
   parseIncompleteMarkdown?: boolean
-  className?: string
+  class?: string
   shikiTheme?: [BundledTheme, BundledTheme]
   mermaidConfig?: MermaidConfig
   controls?: ControlsConfig
@@ -69,6 +69,8 @@ const Block = (props: BlockProps) => {
       : props.content,
   )
 
+  console.log('parsedContent', parsedContent())
+
   return <SolidMarkdown children={parsedContent()} />
 }
 
@@ -81,7 +83,7 @@ export const Streamdown = (props: StreamdownProps) => {
     components,
     rehypePlugins,
     remarkPlugins,
-    className,
+    class: _class,
     shikiTheme = ['github-light', 'github-dark'],
     mermaidConfig,
     controls = true,
@@ -100,7 +102,7 @@ export const Streamdown = (props: StreamdownProps) => {
     <ShikiThemeContext.Provider value={shikiTheme}>
       <MermaidConfigContext.Provider value={mermaidConfig}>
         <ControlsContext.Provider value={controls}>
-          <div class={cn('space-y-4', className)} {...restProps}>
+          <div class={cn('space-y-4', _class)} {...restProps}>
             {blocks().map((block, index) => (
               <Block
                 allowedImagePrefixes={allowedImagePrefixes}

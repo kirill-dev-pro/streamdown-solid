@@ -8,9 +8,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.1.14",
     "solid-js": "^1.9.9",
     "solid-markdown": "^2.0.14",
-    "streamdown-solid": "0.0.1"
+    "streamdown-solid": "0.0.2",
+    "tailwindcss": "^4.1.14"
   },
   "devDependencies": {
     "vite": "^5.0.0",

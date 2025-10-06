@@ -1,5 +1,6 @@
 import { createMemo, createSignal } from 'solid-js'
 import { Streamdown } from 'streamdown-solid'
+import { fullMarkdownExample } from './full-markdown-example'
 
 const sampleMarkdown = `# Streamdown Solid Example
 
@@ -93,10 +94,23 @@ This content is being streamed in real-time:
 
 export default function App() {
   const [markdown, setMarkdown] = createSignal(sampleMarkdown)
-  const [showIncomplete, setShowIncomplete] = createSignal(true)
   const [controls, setControls] = createSignal(true)
 
-  const content = createMemo(() => (showIncomplete() ? incompleteMarkdown : markdown()))
+  async function simulateStream(text: string) {
+    setMarkdown('')
+    const words = text.split(' ')
+    function streamWord(word: string): Promise<void> {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          setMarkdown((prev) => prev + ' ' + word)
+          resolve()
+        }, word.length * 5)
+      })
+    }
+    for (let word of words) {
+      await streamWord(word)
+    }
+  }
 
   return (
     <div class='min-h-screen bg-gray-50'>
@@ -109,17 +123,30 @@ export default function App() {
 
           <div class='flex gap-4 mb-6'>
             <button
-              onClick={() => setShowIncomplete(!showIncomplete())}
+              onClick={() => setMarkdown(incompleteMarkdown)}
               class='px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600'
             >
-              {showIncomplete() ? 'Show Complete' : 'Show Incomplete Example'}
+              Set Incomplete Markdown Example
             </button>
             <button
+              onClick={() => simulateStream(sampleMarkdown)}
+              class='px-4 py-2 bg-sky-500 text-white rounded hover:bg-sky-600'
+            >
+              Simulate Markdown Stream
+            </button>
+            <button
+              onClick={() => setMarkdown(fullMarkdownExample)}
+              class='px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600'
+            >
+              Set Full Markdown Example
+            </button>
+            {/* @TODO add controls  */}
+            {/* <button
               onClick={() => setControls(!controls())}
               class='px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600'
             >
               {controls() ? 'Hide Controls' : 'Show Controls'}
-            </button>
+            </button> */}
           </div>
         </div>
 
@@ -138,11 +165,11 @@ export default function App() {
             <h2 class='text-2xl font-semibold mb-4'>Rendered Output</h2>
             <div class='border border-gray-300 rounded-lg p-6 bg-white min-h-96'>
               <Streamdown
+                class='prose'
                 controls={controls()}
                 parseIncompleteMarkdown={true}
-                children={content()}
+                children={markdown()}
               />
-              {/* <SolidMarkdown children={showIncomplete() ? incompleteMarkdown : markdown()} /> */}
             </div>
           </div>
         </div>

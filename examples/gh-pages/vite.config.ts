@@ -1,8 +1,9 @@
 import { defineConfig } from 'vite'
 import solid from 'vite-plugin-solid'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
-  plugins: [solid()],
+  plugins: [solid(), tailwindcss()],
   base: '/streamdown-solid/',
   server: {
     port: 3000,
@@ -11,14 +12,6 @@ export default defineConfig({
     outDir: 'dist',
   },
   optimizeDeps: {
-    include: [
-      // 'micromark',
-      // 'micromark-util-chunked',
-      // 'micromark-util-resolve-all',
-      // 'micromark-util-symbol',
-      // 'micromark-util-character',
-      'debug',
-      'extend',
-    ],
+    include: ['debug', 'extend'],
   },
 })
