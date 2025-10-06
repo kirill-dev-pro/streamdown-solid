@@ -1,4 +1,4 @@
-import { createMemo, createSignal } from 'solid-js'
+import { createEffect, createMemo, createSignal } from 'solid-js'
 import { Streamdown } from 'streamdown-solid'
 import { fullMarkdownExample } from './full-markdown-example'
 
@@ -84,14 +84,6 @@ You can control which features are enabled:
 
 Try editing the markdown content in the textarea below to see real-time updates!`
 
-const incompleteMarkdown = `# Streaming Example
-
-This content is being streamed in real-time:
-
-- First item
-- Second item
-- Third item that's still being typed...`
-
 export default function App() {
   const [markdown, setMarkdown] = createSignal(sampleMarkdown)
   const [controls, setControls] = createSignal(true)
@@ -112,6 +104,10 @@ export default function App() {
     }
   }
 
+  createEffect(() => {
+    simulateStream(sampleMarkdown)
+  })
+
   return (
     <div class='min-h-screen bg-gray-50'>
       <div class='container mx-auto px-4 py-8'>
@@ -122,12 +118,6 @@ export default function App() {
           </p>
 
           <div class='flex gap-4 mb-6'>
-            <button
-              onClick={() => setMarkdown(incompleteMarkdown)}
-              class='px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600'
-            >
-              Set Incomplete Markdown Example
-            </button>
             <button
               onClick={() => simulateStream(sampleMarkdown)}
               class='px-4 py-2 bg-sky-500 text-white rounded hover:bg-sky-600'
