@@ -10,7 +10,7 @@
   "dependencies": {
     "solid-js": "^1.9.9",
     "solid-markdown": "^2.0.14",
-    "streamdown-solid": "workspace:*"
+    "streamdown-solid": "0.0.1"
   },
   "devDependencies": {
     "vite": "^5.0.0",
