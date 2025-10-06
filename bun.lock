@@ -32,10 +32,11 @@
       "name": "streamdown-solid-gh-page",
       "version": "1.0.0",
       "dependencies": {
+        "@tailwindcss/typography": "^0.5.19",
         "@tailwindcss/vite": "^4.1.14",
         "solid-js": "^1.9.9",
         "solid-markdown": "^2.0.14",
-        "streamdown-solid": "0.0.1",
+        "streamdown-solid": "0.0.2",
         "tailwindcss": "^4.1.14",
       },
       "devDependencies": {
@@ -46,7 +47,7 @@
     },
     "packages/streamdown-solid": {
       "name": "streamdown-solid",
-      "version": "0.0.1",
+      "version": "0.0.2",
       "dependencies": {
         "@testing-library/jest-dom": "^6.9.1",
         "clsx": "^2.1.1",
