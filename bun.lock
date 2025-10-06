@@ -24,6 +24,20 @@
         "vite-plugin-solid": "^2.11.9",
       },
     },
+    "examples/gh-pages": {
+      "name": "streamdown-solid-gh-page",
+      "version": "1.0.0",
+      "dependencies": {
+        "solid-js": "^1.9.9",
+        "solid-markdown": "^2.0.14",
+        "streamdown-solid": "0.0.1",
+      },
+      "devDependencies": {
+        "typescript": "^5.0.0",
+        "vite": "^5.0.0",
+        "vite-plugin-solid": "^2.11.9",
+      },
+    },
     "packages/streamdown-solid": {
       "name": "streamdown-solid",
       "version": "0.0.1",
@@ -851,6 +865,8 @@
     "streamdown-solid": ["streamdown-solid@workspace:packages/streamdown-solid"],
 
     "streamdown-solid-example": ["streamdown-solid-example@workspace:examples/basic"],
+
+    "streamdown-solid-gh-page": ["streamdown-solid-gh-page@workspace:examples/gh-pages"],
 
     "stringify-entities": ["stringify-entities@4.0.4", "", { "dependencies": { "character-entities-html4": "^2.0.0", "character-entities-legacy": "^3.0.0" } }, "sha512-IwfBptatlO+QCJUo19AqvrPNqlVMpW9YEL2LIVY+Rpv2qsjCGxaDLNRgeGsQWJhfItebuJhsGSLjaBbNSQ+ieg=="],
 

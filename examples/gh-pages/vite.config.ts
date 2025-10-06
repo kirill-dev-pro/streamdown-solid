@@ -3,7 +3,7 @@ import solid from 'vite-plugin-solid'
 
 export default defineConfig({
   plugins: [solid()],
-  base: '/',
+  base: '/streamdown-solid/',
   server: {
     port: 3000,
   },

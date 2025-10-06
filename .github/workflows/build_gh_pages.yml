@@ -20,12 +20,12 @@ jobs:
         run: bun install
 
       - name: Build Packages
-        run: cd examples/basic && bun run build
+        run: cd examples/gh-pages && bun run build
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: examples/basic/dist
+          path: examples/gh-pages/dist
 
   # Deploy job
   deploy:
