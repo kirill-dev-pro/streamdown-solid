@@ -69,8 +69,6 @@ const Block = (props: BlockProps) => {
       : props.content,
   )
 
-  console.log('parsedContent', parsedContent())
-
   return <SolidMarkdown children={parsedContent()} />
 }
 

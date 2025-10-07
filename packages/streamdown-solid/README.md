@@ -29,13 +29,13 @@ Streamdown-Solid powers the [AI Elements Response](https://ai-sdk.dev/elements/c
 bun add streamdown-solid
 ```
 
-Then, update your Tailwind `globals.css` to include the following.
+<!-- Then, update your Tailwind `globals.css` to include the following.
 
 ```css
 @source "../node_modules/streamdown-solid/dist/index.js";
 ```
 
-Make sure the path matches the location of the `node_modules` folder in your project. This will ensure that the Streamdown styles are applied to your project.
+Make sure the path matches the location of the `node_modules` folder in your project. This will ensure that the Streamdown styles are applied to your project. -->
 
 ## Usage
 
@@ -145,7 +145,7 @@ Streamdown accepts all the same props as solid-markdown, plus additional streami
 | ------------------------- | ------------------------------------------------------------------- | --------------------------------- | --------------------------------------------------------------- |
 | `children`                | `string`                                                            | -                                 | The Markdown content to render                                  |
 | `parseIncompleteMarkdown` | `boolean`                                                           | `true`                            | Parse and style unterminated Markdown blocks                    |
-| `className`               | `string`                                                            | -                                 | CSS class for the container                                     |
+| `class`                   | `string`                                                            | -                                 | CSS class for the container                                     |
 | `components`              | `object`                                                            | -                                 | Custom component overrides                                      |
 | `remarkPlugins`           | `array`                                                             | `[remarkGfm, remarkMath]`         | Remark plugins to use                                           |
 | `rehypePlugins`           | `array`                                                             | `[rehypeKatex]`                   | Rehype plugins to use                                           |

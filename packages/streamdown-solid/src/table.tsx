@@ -1,5 +1,5 @@
 import { CheckIcon, CopyIcon, DownloadIcon } from 'lucide-solid'
-import { createEffect, createSignal, type JSX } from 'solid-js'
+import { createEffect, createSignal, onCleanup, onMount, type JSX } from 'solid-js'
 import { cn, save } from './utils'
 
 type TableData = {
@@ -89,7 +89,7 @@ function tableDataToMarkdown(data: TableData): string {
 
 export type TableCopyButtonProps = {
   children?: JSX.Element
-  className?: string
+  class?: string
   onCopy?: () => void
   onError?: (error: Error) => void
   timeout?: number
@@ -139,17 +139,17 @@ export const TableCopyButton = (props: TableCopyButtonProps) => {
     }
   }
 
-  createEffect(() => {
-    return () => {
-      window.clearTimeout(timeoutRef)
-    }
-  })
+  // createEffect(() => {
+  //   return () => {
+  //     window.clearTimeout(timeoutRef)
+  //   }
+  // })
 
   return (
     <button
       class={cn(
         'cursor-pointer p-1 text-muted-foreground transition-all hover:text-foreground',
-        props.className,
+        props.class,
       )}
       onClick={copyTableData}
       title={`Copy table as ${props.format || 'markdown'}`}
@@ -162,7 +162,7 @@ export const TableCopyButton = (props: TableCopyButtonProps) => {
 
 export type TableDownloadButtonProps = {
   children?: JSX.Element
-  className?: string
+  class?: string
   onDownload?: () => void
   onError?: (error: Error) => void
   format?: 'csv' | 'markdown'
@@ -224,7 +224,7 @@ export const TableDownloadButton = (props: TableDownloadButtonProps) => {
     <button
       class={cn(
         'cursor-pointer p-1 text-muted-foreground transition-all hover:text-foreground',
-        props.className,
+        props.class,
       )}
       onClick={downloadTableData}
       title={`Download table as ${(props.format || 'csv').toUpperCase()}`}
@@ -237,7 +237,7 @@ export const TableDownloadButton = (props: TableDownloadButtonProps) => {
 
 export type TableDownloadDropdownProps = {
   children?: JSX.Element
-  className?: string
+  class?: string
   onDownload?: (format: 'csv' | 'markdown') => void
   onError?: (error: Error) => void
 }
@@ -270,17 +270,18 @@ export const TableDownloadDropdown = (props: TableDownloadDropdownProps) => {
     }
   }
 
-  createEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef && !dropdownRef.contains(event.target as Node)) {
-        setIsOpen(false)
-      }
+  const handleClickOutside = (event: MouseEvent) => {
+    if (dropdownRef && !dropdownRef.contains(event.target as Node)) {
+      setIsOpen(false)
     }
+  }
 
+  onMount(() => {
     document.addEventListener('mousedown', handleClickOutside)
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
+  })
+
+  onCleanup(() => {
+    document.removeEventListener('mousedown', handleClickOutside)
   })
 
   return (
@@ -288,7 +289,7 @@ export const TableDownloadDropdown = (props: TableDownloadDropdownProps) => {
       <button
         class={cn(
           'cursor-pointer p-1 text-muted-foreground transition-all hover:text-foreground',
-          props.className,
+          props.class,
         )}
         onClick={() => setIsOpen(!isOpen())}
         title='Download table'

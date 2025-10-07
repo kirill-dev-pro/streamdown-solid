@@ -1,4 +1,4 @@
-import { createMemo, createSignal } from 'solid-js'
+import { createMemo, createSignal, onMount } from 'solid-js'
 import { Streamdown } from 'streamdown-solid'
 import { fullMarkdownExample } from './full-markdown-example'
 
@@ -112,6 +112,10 @@ export default function App() {
     }
   }
 
+  onMount(() => {
+    simulateStream(sampleMarkdown)
+  })
+
   return (
     <div class='min-h-screen bg-gray-50'>
       <div class='container mx-auto px-4 py-8'>
@@ -122,12 +126,6 @@ export default function App() {
           </p>
 
           <div class='flex gap-4 mb-6'>
-            <button
-              onClick={() => setMarkdown(incompleteMarkdown)}
-              class='px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600'
-            >
-              Set Incomplete Markdown Example
-            </button>
             <button
               onClick={() => simulateStream(sampleMarkdown)}
               class='px-4 py-2 bg-sky-500 text-white rounded hover:bg-sky-600'

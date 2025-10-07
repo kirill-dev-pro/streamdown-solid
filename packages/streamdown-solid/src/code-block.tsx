@@ -7,6 +7,8 @@ import {
   type JSX,
   type Component,
   Show,
+  onCleanup,
+  onMount,
 } from 'solid-js'
 import {
   type BundledLanguage,
@@ -24,8 +26,8 @@ const PRE_TAG_REGEX = /<pre(\s|>)/
 type CodeBlockProps = {
   code: string
   language: BundledLanguage
-  preClassName?: string
-  className?: string
+  preClass?: string
+  class?: string
   children?: JSX.Element
   [key: string]: any
 }
@@ -169,24 +171,26 @@ const removePreBackground = (html: string) => {
 export const CodeBlock = (props: CodeBlockProps) => {
   const [html, setHtml] = createSignal<string>('')
   const [darkHtml, setDarkHtml] = createSignal<string>('')
-  let mounted = true
+  const [mounted, setMounted] = createSignal(false)
   const [lightTheme, darkTheme] = useContext(ShikiThemeContext)
 
-  createEffect(() => {
-    mounted = true
+  onMount(() => {
+    setMounted(true)
+  })
 
+  onCleanup(() => {
+    setMounted(false)
+  })
+
+  createEffect(() => {
     highlighterManager
-      .highlightCode(props.code, props.language, [lightTheme, darkTheme], props.preClassName)
+      .highlightCode(props.code, props.language, [lightTheme, darkTheme], props.preClass)
       .then(([light, dark]) => {
-        if (mounted) {
+        if (mounted()) {
           setHtml(light)
           setDarkHtml(dark)
         }
       })
-
-    return () => {
-      mounted = false
-    }
   })
 
   return (
@@ -207,7 +211,7 @@ export const CodeBlock = (props: CodeBlockProps) => {
         <div class='w-full'>
           <div class='min-w-full'>
             <div
-              class={cn('overflow-x-auto dark:hidden', props.className)}
+              class={cn('overflow-x-auto dark:hidden', props.class)}
               // biome-ignore lint/security/noDangerouslySetInnerHtml: "this is needed."
               innerHTML={html()}
               data-code-block
@@ -215,7 +219,7 @@ export const CodeBlock = (props: CodeBlockProps) => {
               {...props}
             />
             <div
-              class={cn('hidden overflow-x-auto dark:block', props.className)}
+              class={cn('hidden overflow-x-auto dark:block', props.class)}
               // biome-ignore lint/security/noDangerouslySetInnerHtml: "this is needed."
               innerHTML={darkHtml()}
               data-code-block
@@ -233,7 +237,7 @@ export type CodeBlockCopyButtonProps = {
   onCopy?: () => void
   onError?: (error: Error) => void
   timeout?: number
-  className?: string
+  class?: string
   code?: string
   [key: string]: any
 }
@@ -241,7 +245,7 @@ export type CodeBlockCopyButtonProps = {
 export type CodeBlockDownloadButtonProps = {
   onDownload?: () => void
   onError?: (error: Error) => void
-  className?: string
+  class?: string
   code?: string
   language?: BundledLanguage
   [key: string]: any
@@ -579,7 +583,7 @@ export const CodeBlockDownloadButton = (props: CodeBlockDownloadButtonProps) => 
     <button
       class={cn(
         'cursor-pointer p-1 text-muted-foreground transition-all hover:text-foreground',
-        props.className,
+        props.class,
       )}
       onClick={downloadCode}
       title='Download file'
@@ -626,7 +630,7 @@ export const CodeBlockCopyButton = (props: CodeBlockCopyButtonProps) => {
     <button
       class={cn(
         'cursor-pointer p-1 text-muted-foreground transition-all hover:text-foreground',
-        props.className,
+        props.class,
       )}
       onClick={copyToClipboard}
       type='button'

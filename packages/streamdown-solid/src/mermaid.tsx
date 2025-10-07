@@ -1,5 +1,5 @@
 import type { MermaidConfig } from 'mermaid'
-import { createEffect, createSignal } from 'solid-js'
+import { createMemo, createSignal, Match, onMount, Switch } from 'solid-js'
 import { cn } from './utils'
 
 const initializeMermaid = async (customConfig?: MermaidConfig) => {
@@ -24,7 +24,7 @@ const initializeMermaid = async (customConfig?: MermaidConfig) => {
 
 type MermaidProps = {
   chart: string
-  className?: string
+  class?: string
   config?: MermaidConfig
 }
 
@@ -34,84 +34,85 @@ export const Mermaid = (props: MermaidProps) => {
   const [svgContent, setSvgContent] = createSignal<string>('')
   const [lastValidSvg, setLastValidSvg] = createSignal<string>('')
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: "Required for Mermaid"
-  createEffect(() => {
-    const renderChart = async () => {
-      try {
-        setError(null)
-        setIsLoading(true)
+  const renderChart = async () => {
+    try {
+      setError(null)
+      setIsLoading(true)
 
-        // Initialize mermaid with optional custom config
-        const mermaid = await initializeMermaid(props.config)
+      // Initialize mermaid with optional custom config
+      const mermaid = await initializeMermaid(props.config)
 
-        // Use a stable ID based on chart content hash and timestamp to ensure uniqueness
-        const chartHash = props.chart.split('').reduce((acc, char) => {
-          // biome-ignore lint/suspicious/noBitwiseOperators: "Required for Mermaid"
-          return ((acc << 5) - acc + char.charCodeAt(0)) | 0
-        }, 0)
-        const uniqueId = `mermaid-${Math.abs(
-          chartHash,
-        )}-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
+      // Use a stable ID based on chart content hash and timestamp to ensure uniqueness
+      const chartHash = props.chart.split('').reduce((acc, char) => {
+        // biome-ignore lint/suspicious/noBitwiseOperators: "Required for Mermaid"
+        return ((acc << 5) - acc + char.charCodeAt(0)) | 0
+      }, 0)
+      const uniqueId = `mermaid-${Math.abs(
+        chartHash,
+      )}-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
 
-        const { svg } = await mermaid.render(uniqueId, props.chart)
+      const { svg } = await mermaid.render(uniqueId, props.chart)
 
-        // Update both current and last valid SVG
-        setSvgContent(svg)
-        setLastValidSvg(svg)
-      } catch (err) {
-        // Silently fail and keep the last valid SVG
-        // Don't update svgContent here - just keep what we have
+      // Update both current and last valid SVG
+      setSvgContent(svg)
+      setLastValidSvg(svg)
+    } catch (err) {
+      // Silently fail and keep the last valid SVG
+      // Don't update svgContent here - just keep what we have
 
-        // Only set error if we don't have any valid SVG
-        if (!(lastValidSvg() || svgContent())) {
-          const errorMessage = err instanceof Error ? err.message : 'Failed to render Mermaid chart'
-          setError(errorMessage)
-        }
-      } finally {
-        setIsLoading(false)
+      // Only set error if we don't have any valid SVG
+      if (!(lastValidSvg() || svgContent())) {
+        const errorMessage = err instanceof Error ? err.message : 'Failed to render Mermaid chart'
+        setError(errorMessage)
       }
+    } finally {
+      setIsLoading(false)
     }
+  }
 
+  onMount(() => {
     renderChart()
   })
 
   // Show loading only on initial load when we have no content
-  if (isLoading() && !svgContent() && !lastValidSvg()) {
-    return (
-      <div class={cn('my-4 flex justify-center p-4', props.className)}>
-        <div class='flex items-center space-x-2 text-muted-foreground'>
-          <div class='h-4 w-4 animate-spin rounded-full border-current border-b-2' />
-          <span class='text-sm'>Loading diagram...</span>
-        </div>
-      </div>
-    )
-  }
+  const shouldShowLoading = createMemo(() => isLoading() && !svgContent() && !lastValidSvg())
 
   // Only show error if we have no valid SVG to display
-  if (error() && !svgContent() && !lastValidSvg()) {
-    return (
-      <div class={cn('rounded-lg border border-red-200 bg-red-50 p-4', props.className)}>
-        <p class='font-mono text-red-700 text-sm'>Mermaid Error: {error()}</p>
-        <details class='mt-2'>
-          <summary class='cursor-pointer text-red-600 text-xs'>Show Code</summary>
-          <pre class='mt-2 overflow-x-auto rounded bg-red-100 p-2 text-red-800 text-xs'>
-            {props.chart}
-          </pre>
-        </details>
-      </div>
-    )
-  }
+  const shouldShowError = createMemo(() => error() && !svgContent() && !lastValidSvg())
 
   // Always render the SVG if we have content (either current or last valid)
-  const displaySvg = svgContent() || lastValidSvg()
+  const displaySvg = createMemo(() => svgContent() || lastValidSvg())
 
   return (
-    <div
-      aria-label='Mermaid chart'
-      class={cn('my-4 flex justify-center', props.className)}
-      // biome-ignore lint/security/noDangerouslySetInnerHtml: "Required for Mermaid"
-      innerHTML={displaySvg}
-      role='img'
-    />
+    <Switch>
+      <Match when={shouldShowLoading()}>
+        <div class={cn('my-4 flex justify-center p-4', props.class)}>
+          <div class='flex items-center space-x-2 text-muted-foreground'>
+            <div class='h-4 w-4 animate-spin rounded-full border-current border-b-2' />
+            <span class='text-sm'>Loading diagram...</span>
+          </div>
+        </div>
+      </Match>
+      <Match when={shouldShowError()}>
+        <div class={cn('rounded-lg border border-red-200 bg-red-50 p-4', props.class)}>
+          <p class='font-mono text-red-700 text-sm'>Mermaid Error: {error()}</p>
+          <details class='mt-2'>
+            <summary class='cursor-pointer text-red-600 text-xs'>Show Code</summary>
+            <pre class='mt-2 overflow-x-auto rounded bg-red-100 p-2 text-red-800 text-xs'>
+              {props.chart}
+            </pre>
+          </details>
+        </div>
+      </Match>
+      {/* default to displaying the SVG */}
+      <Match when={true}>
+        <div
+          aria-label='Mermaid chart'
+          class={cn('my-4 flex justify-center', props.class)}
+          innerHTML={displaySvg()}
+          role='img'
+        />
+      </Match>
+    </Switch>
   )
 }
